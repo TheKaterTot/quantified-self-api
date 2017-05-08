@@ -61,10 +61,10 @@ describe('Server', () => {
 
         let parsedFood = JSON.parse(res.body)
 
-        assert.equal(parsedFood[0].id, id)
-        assert.equal(parsedFood[0].name, name)
-        assert.equal(parsedFood[0].calories, calories)
-        assert.ok(parsedFood[0].created_at)
+        assert.equal(parsedFood[0].id, id);
+        assert.equal(parsedFood[0].name, name);
+        assert.equal(parsedFood[0].calories, calories);
+        assert.ok(parsedFood[0].created_at);
         done();
       })
     })
