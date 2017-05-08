@@ -46,7 +46,7 @@ describe('Server', () => {
       this.request.get('api/foods', (err, res) => {
         if (err) { return done(err) }
 
-        assert.equal(res.statusCode, 200)
+        assert.equal(res.statusCode, 200);
 
         done();
       })
@@ -65,6 +65,32 @@ describe('Server', () => {
         assert.equal(parsedFood[0].name, name);
         assert.equal(parsedFood[0].calories, calories);
         assert.ok(parsedFood[0].created_at);
+        done();
+      })
+    })
+  })
+
+  describe('POST /api/foods', () => {
+    afterEach((done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY')
+      .then(() => done());
+    })
+
+    it('should return 200', (done) => {
+      const food = {
+        name: 'chicken',
+        calories: 200
+      }
+
+      this.request.post('api/foods', { form: {food: food} }, (err, res) => {
+        if (err) { return done(err) }
+
+        let parsedFood = JSON.parse(res.body);
+
+        assert.equal(res.statusCode, 200);
+        assert.equal(parsedFood.name, 'chicken');
+        assert.equal(parsedFood.calories, 200);
+
         done();
       })
     })
