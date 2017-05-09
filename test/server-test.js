@@ -123,6 +123,20 @@ describe('Server', () => {
       })
     })
 
+    it('can update the calories of a food and not the name', (done) => {
+      const newCal = { food: {name: '', calories: 1000} }
+
+      this.request.patch('/api/foods/1', { form: newCal }, (err, res) => {
+        if (err) { done(err) }
+        assert.equal(res.statusCode, 200);
+
+        const parsedFood = JSON.parse(res.body);
+        assert.equal(parsedFood.name, 'popcorn');
+        assert.equal(parsedFood.calories, 1000);
+        done();
+      })
+    })
+
   })
 
   describe('DELETE /api/foods', () => {
