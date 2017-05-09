@@ -6,11 +6,20 @@ const Food = require('../lib/models/food');
 
 describe('Food', () => {
   it('is invalid without calories', (done) => {
-    Food.create({name: 'banana', calories: null})
+    Food.create('banana')
       .catch( (err) => {
         assert.equal(err.message, 'Food must have calories.')
       })
 
-    done()
+    done();
+  })
+
+  it('is invalid without name', (done) => {
+    Food.create(null, 40)
+      .catch( (err) => {
+        assert.equal(err.message, 'Food must have name.')
+      })
+
+    done();
   })
 })
