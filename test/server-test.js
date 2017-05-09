@@ -96,6 +96,35 @@ describe('Server', () => {
     })
   })
 
+  describe('PATCH /api/foods', () => {
+    beforeEach((done) => {
+      database.raw(
+        'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
+        ['popcorn', 50, new Date]
+      ).then(() => done());
+    })
+
+    afterEach((done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY')
+      .then(() => done());
+    })
+
+    it('can update the name of a food', (done) => {
+      const newName = { food: {name: "chocolate cake", calories: 300}}
+
+      this.request.patch('/api/foods/1', { form: newName}, (err, res) => {
+        if (err) { done(err) }
+
+        assert.equal(res.statusCode, 202);
+
+        const parsedFood = JSON.parse(res.body);
+        assert.equal(parsedFood.name, "chocolate cake");
+        done();
+      })
+    })
+
+  })
+
   describe('DELETE /api/foods', () => {
     beforeEach((done) => {
       database.raw(
