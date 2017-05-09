@@ -17,4 +17,6 @@ app.get('/api/foods', FoodsController.index);
 
 app.post('/api/foods', FoodsController.create);
 
+app.delete('/api/foods/:id', FoodsController.destroy);
+
 module.exports = app;

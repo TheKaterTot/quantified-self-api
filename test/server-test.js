@@ -95,4 +95,32 @@ describe('Server', () => {
       })
     })
   })
+
+  describe('DELETE /api/foods', () => {
+    beforeEach((done) => {
+      database.raw(
+        'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
+        ['burrito', 700, new Date]
+      ).then((data) => {
+        return database.raw('SELECT * FROM foods WHERE name = ?', 'burrito')
+      }).then((data) => {
+        this.id = data.rows[0].id
+        done();
+      })
+    })
+
+    it('should return 200', (done) => {
+      this.request.delete(`api/foods/${this.id}`, (err, res) => {
+        if (err) { return done(err) }
+
+        assert.equal(res.statusCode, 200);
+
+        database.raw('SELECT * FROM foods WHERE id = ?', this.id)
+          .then((data) => {
+            assert.equal(data.rows.length, 0)
+            done();
+          })
+      })
+    })
+  })
 })
