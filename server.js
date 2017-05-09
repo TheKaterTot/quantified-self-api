@@ -18,20 +18,22 @@ app.get('/api/foods', FoodsController.index);
 
 app.post('/api/foods', FoodsController.create);
 
-app.patch('/api/foods/:id', (req, res) =>{
-  const id = req.params.id
-  const name = req.body.food.name
-  const calories = req.body.food.calories
-  const food = Food.find(id)
+app.patch('/api/foods/:id', FoodsController.update);
 
-   database.raw('UPDATE foods SET name = ?, calories = ? WHERE id = ? RETURNING *',
-    [name || food.name, calories || food.calories, id])
-    .then( (data) => {
-      if (!data.rowCount) { res.sendStatus(404) };
-
-      res.status(202).json(data.rows[0])
-  });
-});
+// app.patch('/api/foods/:id', (req, res) =>{
+//   const id = req.params.id
+//   const name = req.body.food.name
+//   const calories = req.body.food.calories
+//   const food = Food.find(id)
+//
+//    database.raw('UPDATE foods SET name = ?, calories = ? WHERE id = ? RETURNING *',
+//     [name || food.name, calories || food.calories, id])
+//     .then( (data) => {
+//       if (!data.rowCount) { res.sendStatus(404) };
+//
+//       res.status(202).json(data.rows[0])
+//   });
+// });
 
 app.delete('/api/foods/:id', FoodsController.destroy);
 

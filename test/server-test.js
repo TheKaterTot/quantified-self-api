@@ -115,7 +115,7 @@ describe('Server', () => {
       this.request.patch('/api/foods/1', { form: newName}, (err, res) => {
         if (err) { done(err) }
 
-        assert.equal(res.statusCode, 202);
+        assert.equal(res.statusCode, 200);
 
         const parsedFood = JSON.parse(res.body);
         assert.equal(parsedFood.name, "chocolate cake");
