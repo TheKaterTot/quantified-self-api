@@ -204,6 +204,18 @@ describe('Server', () => {
         done();
       })
     })
+
+    it('returns an empty array if there is no snack for that day', (done) =>{
+      this.request.get(`/api/meals/breakfast/2001/02/20`, (err, res) => {
+        assert.equal(res.statusCode, 200);
+
+        const parsedData = JSON.parse(res.body);
+
+        assert.equal(parsedData.length, 0)
+        assert.deepEqual(parsedData, [])
+        done();
+      })
+    })
   })
 
   describe('GET /api/meals/lunch/<date>', () => {
@@ -241,6 +253,18 @@ describe('Server', () => {
         done();
       })
     })
+
+    it('returns an empty array if there is no snack for that day', (done) =>{
+      this.request.get(`/api/meals/lunch/2001/02/20`, (err, res) => {
+        assert.equal(res.statusCode, 200);
+
+        const parsedData = JSON.parse(res.body);
+
+        assert.equal(parsedData.length, 0)
+        assert.deepEqual(parsedData, [])
+        done();
+      })
+    })
   })
 
   describe('GET /api/meals/dinner/<date>', () => {
@@ -275,6 +299,18 @@ describe('Server', () => {
         assert.equal(parsedData[0].food_name, 'calzone')
         assert.equal(parsedData[0].calories, 2500)
         assert.equal(parsedData[0].category_name, 'dinner')
+        done();
+      })
+    })
+
+    it('returns an empty array if there is no snack for that day', (done) =>{
+      this.request.get(`/api/meals/dinner/2001/02/20`, (err, res) => {
+        assert.equal(res.statusCode, 200);
+
+        const parsedData = JSON.parse(res.body);
+
+        assert.equal(parsedData.length, 0)
+        assert.deepEqual(parsedData, [])
         done();
       })
     })
@@ -323,6 +359,7 @@ describe('Server', () => {
         const parsedData = JSON.parse(res.body);
 
         assert.equal(parsedData.length, 0)
+        assert.deepEqual(parsedData, [])
         done();
       })
     })
