@@ -1,10 +1,21 @@
 const assert = require('chai').assert;
 const app = require('../server.js');
 const request = require('request');
+const Food = require('../lib/models/food');
 
 const environment = process.env.NODE_ENV || 'test';
 const configuration = require('../knexfile')[environment];
 const database = require('knex')(configuration);
+
+function truncate (done) {
+  database.raw('TRUNCATE foods RESTART IDENTITY CASCADE').then(() => {
+    return database.raw('TRUNCATE categories RESTART IDENTITY CASCADE');
+  }).then(() => {
+    return database.raw('TRUNCATE meals RESTART IDENTITY CASCADE');
+  }).then(() => {
+    done();
+  }).catch(done);
+}
 
 describe('Server', () => {
   before(done => {
@@ -37,10 +48,7 @@ describe('Server', () => {
       ).then(() => done());
     })
 
-    afterEach((done) => {
-      database.raw('TRUNCATE foods RESTART IDENTITY')
-      .then(() => done());
-    })
+    afterEach(truncate)
 
     it('should return 200', (done) => {
       this.request.get('api/foods', (err, res) => {
@@ -71,10 +79,7 @@ describe('Server', () => {
   })
 
   describe('POST /api/foods', () => {
-    afterEach((done) => {
-      database.raw('TRUNCATE foods RESTART IDENTITY')
-      .then(() => done());
-    })
+    afterEach(truncate)
 
     it('should return 200', (done) => {
       const food = {
@@ -104,10 +109,7 @@ describe('Server', () => {
       ).then(() => done());
     })
 
-    afterEach((done) => {
-      database.raw('TRUNCATE foods RESTART IDENTITY')
-      .then(() => done());
-    })
+    afterEach(truncate)
 
     it('can update the name of a food', (done) => {
       const newName = { food: {name: "chocolate cake", calories: 300}}
@@ -163,6 +165,43 @@ describe('Server', () => {
             assert.equal(data.rows.length, 0)
             done();
           })
+      })
+    })
+  })
+
+  describe('GET /api/meals/breakfast/<date>', () => {
+    beforeEach((done) => {
+      Food.create('burrito', 400)
+      .then((data) => {
+        this.food = data.rows[0];
+        return database.raw(
+          'INSERT INTO categories (name, created_at) VALUES (?, ?) RETURNING *',
+          ['breakfast', new Date])
+      }).then((data) => {
+        this.category = data.rows[0];
+        return database.raw(
+          'INSERT INTO meals (food_id, category_id, date, created_at) VALUES (?, ?, ?, ?)',
+          [this.food.id, this.category.id, new Date(2017, 5, 1), new Date])
+      }).then(() => {
+        done();
+      }).catch(done)
+    })
+
+    afterEach(truncate)
+
+    it('should return 200', (done) => {
+      this.request.get(`/api/meals/breakfast/2017/05/01`, (err, res) => {
+        assert.equal(res.statusCode, 200);
+
+        const parsedData = JSON.parse(res.body);
+
+        assert.equal(parsedData.length, 1)
+        assert.equal(parsedData[0].food_id, this.food.id)
+        assert.equal(parsedData[0].category_id, this.category.id)
+        assert.equal(parsedData[0].food_name, 'burrito')
+        assert.equal(parsedData[0].calories, 400)
+        assert.equal(parsedData[0].category_name, 'breakfast')
+        done();
       })
     })
   })
