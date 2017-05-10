@@ -2,6 +2,7 @@ const assert = require('chai').assert;
 const app = require('../server.js');
 const request = require('request');
 const Food = require('../lib/models/food');
+const food = new Food
 
 const environment = process.env.NODE_ENV || 'test';
 const configuration = require('../knexfile')[environment];
@@ -171,7 +172,7 @@ describe('Server', () => {
 
   describe('GET /api/meals/breakfast/<date>', () => {
     beforeEach((done) => {
-      Food.create('burrito', 400)
+      food.create('burrito', 400)
       .then((data) => {
         this.food = data.rows[0];
         return database.raw(
@@ -220,7 +221,7 @@ describe('Server', () => {
 
   describe('GET /api/meals/lunch/<date>', () => {
     beforeEach((done) => {
-      Food.create('taco', 250)
+      food.create('taco', 250)
       .then((data) => {
         this.food = data.rows[0];
         return database.raw(
@@ -269,7 +270,7 @@ describe('Server', () => {
 
   describe('GET /api/meals/dinner/<date>', () => {
     beforeEach((done) => {
-      Food.create('calzone', 2500)
+      food.create('calzone', 2500)
       .then((data) => {
         this.food = data.rows[0];
         return database.raw(
@@ -318,7 +319,7 @@ describe('Server', () => {
 
   describe('GET /api/meals/snacks/<date>', () => {
     beforeEach((done) => {
-      Food.create('popcorn', 10)
+      food.create('popcorn', 10)
       .then((data) => {
         this.food = data.rows[0];
         return database.raw(
