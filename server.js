@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('port', port);
 
 app.listen(port, function () {
-  console.log('Listening on port 3000!');
+  console.log(`Listening on port ${port}!`);
 });
 
 app.get('/api/foods', FoodsController.index);
