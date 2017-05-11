@@ -9,6 +9,11 @@ const mealsRouter = require('./lib/routers/meals-router');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('port', port);
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.listen(port, function () {
   console.log(`Listening on port ${port}!`);
 });
