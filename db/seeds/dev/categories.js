@@ -5,19 +5,19 @@ exports.seed = function(knex, Promise) {
       return Promise.all([
         knex.raw(
           'INSERT INTO categories (name, created_at) VALUES (?, ?)',
-          ["Breakfast", new Date]
+          ["breakfast", new Date]
         ),
         knex.raw(
           'INSERT INTO categories (name, created_at) VALUES (?, ?)',
-          ["Lunch", new Date]
+          ["lunch", new Date]
         ),
         knex.raw(
           'INSERT INTO categories (name, created_at) VALUES (?, ?)',
-          ["Dinner", new Date]
+          ["dinner", new Date]
         ),
         knex.raw(
           'INSERT INTO categories (name, created_at) VALUES (?, ?)',
-          ["Snacks", new Date]
+          ["snacks", new Date]
         ),
       ])
     })
