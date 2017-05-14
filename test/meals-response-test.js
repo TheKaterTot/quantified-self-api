@@ -37,7 +37,7 @@ describe('Server', () => {
     this.server.close();
   })
 
-  describe('POST /api/meals', () => {
+  describe('/api/meals', () => {
     afterEach(truncate)
 
     describe('GET /api/meals/breakfast/<date>', () => {
@@ -52,7 +52,7 @@ describe('Server', () => {
           this.category = data.rows[0];
           return database.raw(
             'INSERT INTO meals (food_id, category_id, date, created_at) VALUES (?, ?, ?, ?)',
-            [this.food.id, this.category.id, new Date(2017, 5, 1), new Date])
+            [this.food.id, this.category.id, '2017/5/1', new Date])
         }).then(() => {
           done();
         }).catch(done)
@@ -60,7 +60,7 @@ describe('Server', () => {
 
 
       it('should return 200', (done) => {
-        this.request.get(`/api/meals/breakfast/2017/05/01`, (err, res) => {
+        this.request.get(`/api/meals/breakfast/2017/5/1`, (err, res) => {
           assert.equal(res.statusCode, 200);
 
           const parsedData = JSON.parse(res.body);
@@ -75,7 +75,7 @@ describe('Server', () => {
         })
       })
 
-      it('returns an empty array if there is no snack for that day', (done) =>{
+      it('returns an empty array if there is no breakfast for that day', (done) =>{
         this.request.get(`/api/meals/breakfast/2001/02/20`, (err, res) => {
           assert.equal(res.statusCode, 200);
 
@@ -100,14 +100,14 @@ describe('Server', () => {
           this.category = data.rows[0];
           return database.raw(
             'INSERT INTO meals (food_id, category_id, date, created_at) VALUES (?, ?, ?, ?)',
-            [this.food.id, this.category.id, new Date(2015, 15, 11), new Date])
+            [this.food.id, this.category.id, '2015/11/15', new Date])
         }).then(() => {
           done();
         }).catch(done)
       })
 
       it('should return the meal data', (done) => {
-        this.request.get(`/api/meals/lunch/2015/15/11`, (err, res) => {
+        this.request.get(`/api/meals/lunch/2015/11/15`, (err, res) => {
           assert.equal(res.statusCode, 200);
 
           const parsedData = JSON.parse(res.body);
@@ -123,7 +123,7 @@ describe('Server', () => {
       })
 
       it('returns an empty array if there is no snack for that day', (done) =>{
-        this.request.get(`/api/meals/lunch/2001/02/20`, (err, res) => {
+        this.request.get(`/api/meals/lunch/2001/2/20`, (err, res) => {
           assert.equal(res.statusCode, 200);
 
           const parsedData = JSON.parse(res.body);
@@ -147,14 +147,14 @@ describe('Server', () => {
           this.category = data.rows[0];
           return database.raw(
             'INSERT INTO meals (food_id, category_id, date, created_at) VALUES (?, ?, ?, ?)',
-            [this.food.id, this.category.id, new Date(2017, 02, 02), new Date])
+            [this.food.id, this.category.id, '2017/2/2', new Date])
         }).then(() => {
           done();
         }).catch(done)
       })
 
       it('should return the meal data', (done) => {
-        this.request.get(`/api/meals/dinner/2017/02/02`, (err, res) => {
+        this.request.get(`/api/meals/dinner/2017/2/02`, (err, res) => {
           assert.equal(res.statusCode, 200);
 
           const parsedData = JSON.parse(res.body);
@@ -169,8 +169,8 @@ describe('Server', () => {
         })
       })
 
-      it('returns an empty array if there is no snack for that day', (done) =>{
-        this.request.get(`/api/meals/dinner/2001/02/20`, (err, res) => {
+      it('returns an empty array if there is no dinner for that day', (done) =>{
+        this.request.get(`/api/meals/dinner/2001/2/20`, (err, res) => {
           assert.equal(res.statusCode, 200);
 
           const parsedData = JSON.parse(res.body);
@@ -193,9 +193,9 @@ describe('Server', () => {
         }).then((data) => {
           this.category = data.rows[0];
           return database.raw(
-            'INSERT INTO meals (food_id, category_id, date, created_at) VALUES (?, ?, ?, ?)',
-            [this.food.id, this.category.id, new Date(2001, 12, 20), new Date])
-        }).then(() => {
+            'INSERT INTO meals (food_id, category_id, date, created_at) VALUES (?, ?, ?, ?) RETURNING *',
+            [this.food.id, this.category.id, '2001/12/20', new Date])
+        }).then((data) => {
           done();
         }).catch(done)
       })
@@ -217,7 +217,7 @@ describe('Server', () => {
       })
 
       it('returns an empty array if there is no snack for that day', (done) =>{
-        this.request.get(`/api/meals/snacks/2001/02/20`, (err, res) => {
+        this.request.get(`/api/meals/snacks/2001/2/20`, (err, res) => {
           assert.equal(res.statusCode, 200);
 
           const parsedData = JSON.parse(res.body);
