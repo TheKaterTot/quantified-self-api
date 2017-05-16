@@ -136,6 +136,33 @@ describe('Server', () => {
       })
     })
 
+    it('can update the calories and the name of a food', (done) => {
+      const newCal = { food: {name: 'chips', calories: 3000} }
+
+      this.request.patch('/api/foods/1', { form: newCal }, (err, res) => {
+        if (err) { done(err) }
+        assert.equal(res.statusCode, 200);
+
+        const parsedFood = JSON.parse(res.body);
+        assert.equal('chips', parsedFood.name);
+        assert.equal(3000, parsedFood.calories);
+        done();
+      })
+    })
+
+    it('can update the status of a food', (done) => {
+      const newCal = { food: {status: 'inactive'} }
+
+      this.request.patch('/api/foods/1', { form: newCal }, (err, res) => {
+        if (err) { done(err) }
+        assert.equal(res.statusCode, 200);
+
+        const parsedFood = JSON.parse(res.body);
+        assert.equal('inactive', parsedFood.status);
+        done();
+      })
+    })
+
   })
 
   describe('DELETE /api/foods', () => {
