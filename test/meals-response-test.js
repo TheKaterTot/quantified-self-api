@@ -228,5 +228,52 @@ describe('Server', () => {
         })
       })
     })
+
+    describe('POST /api/meals', () => {
+      beforeEach((done) => {
+        food.create('paella', 2000)
+        .then((data) => {
+          this.foods = [data.rows[0]]
+          return food.create('muffin', 900)
+        }).then((data) => {
+          this.foods.push(data.rows[0])
+          return database.raw(
+            'INSERT INTO categories (name, created_at) VALUES (?, ?) RETURNING *',
+            ['breakfast', new Date])
+        }).then((data) => {
+          this.category = data.rows[0];
+          done();
+        })
+      })
+
+      afterEach(truncate)
+
+      it('should return 200', (done) => {
+        let meal = {
+          foodIds: this.foods.map((food) => {
+            return food.id
+          }).join(','),
+          category: 'breakfast',
+          date: '2017/5/15'
+        }
+
+        this.request.post('api/meals', { form: {meal: meal} }, (err, res) => {
+          if (err) { return done(err) }
+
+          let parsedMeals = JSON.parse(res.body);
+          let parsedDate = new Date(parsedMeals[0].date);
+
+          assert.equal(res.statusCode, 200);
+          assert.equal(parsedMeals.length, 2);
+          assert.equal(parsedMeals[0].food_id, this.foods[0].id)
+          assert.equal(parsedMeals[0].category, 'breakfast')
+          assert.equal(parsedDate.getFullYear(), '2017')
+          assert.equal(parsedDate.getMonth(), '4')
+          assert.equal(parsedDate.getDate(), '15')
+
+          done();
+        })
+      })
+    })
   })
 })
