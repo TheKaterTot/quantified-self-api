@@ -228,5 +228,46 @@ describe('Server', () => {
         })
       })
     })
+
+    describe('POST /api/meals', () => {
+      beforeEach((done) => {
+        food.create('paella', 2000)
+        .then((data) => {
+          this.food = data.rows[0];
+          return database.raw(
+            'INSERT INTO categories (name, created_at) VALUES (?, ?) RETURNING *',
+            ['breakfast', new Date])
+        }).then((data) => {
+          this.category = data.rows[0];
+          done();
+        })
+      })
+
+      afterEach(truncate)
+
+      it('should return 200', (done) => {
+        let meal = {
+          foodID: this.food.id,
+          category: 'breakfast',
+          date: '2017/5/15'
+        }
+
+        this.request.post('api/meals', { form: {meal: meal} }, (err, res) => {
+          if (err) { return done(err) }
+
+          let parsedMeal = JSON.parse(res.body);
+          let parsedDate = new Date(parsedMeal.date);
+
+          assert.equal(res.statusCode, 200);
+          assert.equal(parsedMeal.food_id, this.food.id)
+          assert.equal(parsedMeal.category, 'breakfast')
+          assert.equal(parsedDate.getFullYear(), '2017')
+          assert.equal(parsedDate.getMonth(), '4')
+          assert.equal(parsedDate.getDate(), '15')
+
+          done();
+        })
+      })
+    })
   })
 })
