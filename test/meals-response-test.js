@@ -229,6 +229,44 @@ describe('Server', () => {
       })
     })
 
+    describe('DELETE /api/meals', () => {
+      beforeEach((done) => {
+        food.create('popcorn', 10)
+        .then((data) => {
+          this.food = data.rows[0];
+          return database.raw(
+            'INSERT INTO categories (name, created_at) VALUES (?, ?) RETURNING *',
+            ['snacks', new Date])
+        }).then((data) => {
+          this.category = data.rows[0];
+          return database.raw(
+            'INSERT INTO meals (food_id, category_id, date, created_at) VALUES (?, ?, ?, ?) RETURNING *',
+            [this.food.id, this.category.id, '2001/12/20', new Date])
+        }).then((data) => {
+          this.id = data.rows[0].id
+          done();
+        }).catch(done)
+      })
+
+      afterEach(truncate)
+
+      it('should return 200', (done) => {
+        this.request.delete(`/api/meals/${this.id}`, (err, res) => {
+          if (err) { return done(err) }
+
+          assert.equal(200, res.statusCode);
+
+          database.raw('SELECT * FROM meals WHERE id = ?', this.id)
+            .then((data) => {
+              assert.equal(data.rows.length, 0)
+              done();
+            })
+        })
+      })
+
+  });
+
+
     describe('POST /api/meals', () => {
       beforeEach((done) => {
         food.create('paella', 2000)
