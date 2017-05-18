@@ -73,15 +73,15 @@ Response:
  
  There are four meal types available:
  
- -breakfast
- -lunch
- -dinner
- -snacks
+ - breakfast
+ - lunch
+ - dinner
+ - snacks
  
  Get meals by date
   
  
- GET api/meals/<meal-type>/<year>/<month>/<day>
+ GET api/meals/:meal-type/:year/:month/:day
  
  Example: api/meals/breakfast/2017/05/20
  
