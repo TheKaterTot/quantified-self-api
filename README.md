@@ -39,13 +39,13 @@ Request:
  
 ``
 Response:
-``
+```json
 {"id":10,
   "name":"potato",
   "calories":100,
   "created_at":"2017-05-17T03:42:04.074Z",
   "status":"active"}
-``
+```
 
 Editing a food:
 
