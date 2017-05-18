@@ -30,9 +30,9 @@ POST api/foods
 Request:
 ```json
 {
-  food: { 
-    name: "potato", 
-    calories: 100 
+  "food": { 
+    "name": "potato", 
+    "calories": 100 
   }
  }
  
@@ -53,9 +53,9 @@ PATCH api/foods
 Request:
 ```json
 {
-  food: { 
-    name: "potato", 
-    calories: 200 
+  "food": { 
+    "name": "potato", 
+    "calories": 200 
   }
  }
 ```
@@ -87,12 +87,12 @@ Response:
  Response:
  ```json
   {
-  meal: { 
-    food_id: 3, 
-    category_id: 1,
-    food_name: "salsa",
-    calories: 3,
-    category:name: "breakfast"
+  "meal": { 
+    "food_id": 3, 
+    "category_id": 1,
+    "food_name": "salsa",
+    "calories": 3,
+    "category_name": "breakfast"
   }
  }
  ```
@@ -100,17 +100,34 @@ Response:
  Add a food to a meal
  
  POST api/meals
- 
+
+Request:
  ```json
  {
-   meal: {
-     foodIds: ["1,3"],
-     category: "breakfast",
-     date: '2017/5/15'
+   "meal": {
+     "foodIds": ["1,3"],
+     "category": "breakfast",
+     "date": '2017/5/15'
    }
   }
  ```
- 
+Response:
+```json
+[{
+    "meal": {
+      "food_id": 1,
+      "category": "breakfast",
+      "date": '2017/5/15'
+    }
+  },
+  {
+    "meal": {
+      "food_id": 3,
+      "category": "breakfast",
+      "date": '2017/5/15'
+  }]
+```
+
 Delete a food from a meal
  
 DELETE api/meals/:id
