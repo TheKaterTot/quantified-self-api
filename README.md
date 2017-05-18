@@ -8,6 +8,7 @@ Getting all foods:
 
 GET api/foods
 
+Response:
 ```json
 [
   {"id":1,
