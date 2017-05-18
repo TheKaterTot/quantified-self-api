@@ -108,7 +108,7 @@ Request:
    "meal": {
      "foodIds": ["1,3"],
      "category": "breakfast",
-     "date": '2017/5/15'
+     "date": "2017/5/15"
    }
   }
  ```
@@ -118,14 +118,14 @@ Response:
     "meal": {
       "food_id": 1,
       "category": "breakfast",
-      "date": '2017/5/15'
+      "date": "2017/5/15"
     }
   },
   {
     "meal": {
       "food_id": 3,
       "category": "breakfast",
-      "date": '2017/5/15'
+      "date": "2017/5/15"
   }]
 ```
 
