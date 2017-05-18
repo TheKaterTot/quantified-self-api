@@ -126,6 +126,7 @@ Response:
       "food_id": 3,
       "category": "breakfast",
       "date": "2017/5/15"
+    }
   }]
 ```
 
