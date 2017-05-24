@@ -7,7 +7,9 @@ The quantified self API is a Node.js(v7.2.1)/Express app using PostgresQL and kn
 
 Clone down this repo, cd into the directory, and run npm install.
 
-To run the tests, npm test.
+To set up your DB, knex migrate:latest.
+
+To run the tests, npm test. (Note: Some of the tests use Selenium, which requires FireFox 46 to run correctly).
 
 ### Using the quantified-self-api ###
 
