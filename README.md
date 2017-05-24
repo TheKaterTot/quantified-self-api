@@ -1,4 +1,15 @@
-# quantified-self-api
+### General Information about Quantified Self ###
+The quantified self API is the backend to https://github.com/cmacaulay/quantified-self, a webapp to track calories throughout your day.
+
+The quantified self API is a Node.js(v7.2.1)/Express app using PostgresQL and knex.
+
+### Setup ###
+
+Clone down this repo, cd into the directory, and run npm install.
+
+To run the tests, npm test.
+
+### Using the quantified-self-api ###
 
 **Base URL: https://q-self-api.herokuapp.com/**
 
